@@ -1,0 +1,9 @@
+@media (min-width: 978px) {
+  #navbarDarkDropdownMenu {
+    padding-right: 55px;
+  }
+}
+
+nav {
+  margin-bottom: 15px;
+}

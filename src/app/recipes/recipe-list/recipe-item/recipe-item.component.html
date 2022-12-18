@@ -1,0 +1,16 @@
+<a
+  routerLink="/recipe/details"
+  class="list-group-item clearfix"
+  [routerLink]='["/recipe-list", recipe.id]'
+  routerLinkActive="active"
+>
+  <div class="float-start">
+    <h4 class="list-group-item-heading">
+      {{ recipe.name }}
+    </h4>
+    <p class="list-group-item-text">{{ recipe.description | shorten:11 }}</p>
+  </div>
+  <div class="float-end">
+    <img [src]="recipe.imagePath" [alt]="recipe.name" class="img-thumbnail" style="max-height: 50px;">
+  </div>
+</a>

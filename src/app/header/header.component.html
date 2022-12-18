@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" routerLink="/recipe-list">Recipe Book</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            routerLink="/recipe-list"
+            aria-current="page"
+            *ngIf="isAuthenticated"
+          >
+            Recipes
+        </a>
+        </li>
+        <li class="nav-item">
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            routerLink="/auth"
+            aria-current="page"
+            *ngIf="!isAuthenticated"
+          >
+            Authenticate
+        </a>
+        <li class="nav-item">
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            routerLink="/shopping-list"
+          >
+            Shopping List
+          </a>
+        </li>
+      </ul>
+      <div class="dropdown navbar-nav navbar-light bg-light " id="navbarDarkDropdownMenu">
+        <a class="nav-link" *ngIf="isAuthenticated" (click)="onLogOut()" style="cursor: pointer">
+          Logout
+        </a>
+        <!--
+          - Removed just to show a possible use of custom directive
+          - data-bs-toggle="dropdown" appDropdown-->
+        <a class="nav-link dropdown-toggle" appDropdown id="navbarDarkDropdownMenuLink"
+           role="navigation"  aria-expanded="false" *ngIf="isAuthenticated">
+          Manage
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" (click)="onSaveData()">Save data</a></li>
+          <li><a class="dropdown-item" (click)="onFetchData()">Fetch data</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
