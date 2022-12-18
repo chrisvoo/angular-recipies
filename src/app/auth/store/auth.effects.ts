@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthResponseData } from '../auth.service';
@@ -60,14 +60,14 @@ export class AuthEffects {
     )
   );
 
-  authSuccess = createEffect(() => {
-    return this.actions$.pipe(
+  authSuccess = createEffect(() =>
+    this.actions$.pipe(
       ofType(LOGIN),
       tap(() => {
         this.router.navigate(['/']);
       })
-    );
-  });
+    ), { dispatch: false } // without this, it creates a nasty loop
+  );
 
   constructor(
     private actions$: Actions,

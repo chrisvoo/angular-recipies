@@ -1,5 +1,5 @@
 {
-  "name": "bootstrap",
+  "name": "recipes",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -29,6 +29,7 @@
     "@angular-devkit/build-angular": "^15.0.2",
     "@angular/cli": "^15.0.2",
     "@angular/compiler-cli": "^15.0.2",
+    "@ngx-env/builder": "^2.2.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~3.10.0",
