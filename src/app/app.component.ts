@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { AuthService } from './auth/auth.service';
+import { Store } from '@ngrx/store';
+import { AUTO_LOGIN } from './auth/store/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,10 @@ import { AuthService } from './auth/auth.service';
 export class AppComponent implements OnInit {
   title = 'Tasty recipies!'
 
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.authService.autoLogin()
+    this.store.dispatch(AUTO_LOGIN())
   }
 
 

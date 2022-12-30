@@ -5,4 +5,6 @@ export const LOGIN = createAction('[Auth] LOGIN', props<{ payload: User }>());
 export const LOGOUT = createAction('[Auth] LOGOUT');
 export const LOGIN_START = createAction('[Auth] LOGIN Start', props<{ payload: { email: string, password: string } }>());
 export const LOGIN_FAILED = createAction('[Auth] LOGIN Failed', props<{ payload: string }>());
+export const CLEAR_ERROR = createAction('[Auth] Clear error');
+export const AUTO_LOGIN = createAction('[Auth] Auto login');
 

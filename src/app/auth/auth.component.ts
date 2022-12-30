@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { AppState } from '../store/app.state';
-import { AuthService, AuthResponseData } from './auth.service';
-import { LOGIN_START } from './store/auth.actions';
+import { AuthResponseData } from './auth.service';
+import { CLEAR_ERROR, LOGIN_START } from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -17,15 +17,14 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoading = false;
   error?: string|undefined = undefined;
   private closeSub?: Subscription;
+  private storeSub?: Subscription;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
     private store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
-    this.store.select('auth').subscribe(authState => {
+    this.storeSub = this.store.select('auth').subscribe(authState => {
       this.isLoading = authState.loading;
       this.error = authState.authError;
     });
@@ -35,6 +34,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.closeSub) {
       this.closeSub.unsubscribe();
     }
+
+    if (this.storeSub) {
+      this.storeSub.unsubscribe()
+    }
   }
 
   onSwitchMode() {
@@ -42,7 +45,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
-    this.error = undefined;
+    this.store.dispatch(CLEAR_ERROR());
   }
 
   onSubmit(form: NgForm) {
@@ -60,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         LOGIN_START({ payload: { email, password } })
       );
     } else {
-      authObs = this.authService.signup(email, password);
+      //authObs = this.authService.signup(email, password);
     }
 
     form.reset()

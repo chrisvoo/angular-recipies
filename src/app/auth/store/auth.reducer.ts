@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { LOGIN, LOGIN_FAILED, LOGIN_START, LOGOUT } from './auth.actions';
+import { CLEAR_ERROR, LOGIN, LOGIN_FAILED, LOGIN_START, LOGOUT } from './auth.actions';
 import { AuthState } from 'src/app/store/app.state';
 import User from '../user.model';
 
@@ -22,5 +22,8 @@ export const authReducer = createReducer(
   }))),
   on(LOGIN_FAILED, ((state, { payload }): AuthState => ({
     ...state, authError: payload, loading: false, user: undefined
+  }))),
+  on(CLEAR_ERROR, ((state): AuthState => ({
+    ...state, authError: undefined
   })))
 )
