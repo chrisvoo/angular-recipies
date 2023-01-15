@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { LOGOUT } from '../auth/store/auth.actions';
 import User from '../auth/user.model';
-import { DataStorageService } from '../shared/data-storage.service';
+import { FETCH_RECIPES, STORE_RECIPIES } from '../recipes/store/recipes.actions';
 import { AppState, AuthState } from '../store/app.state';
 
 @Component({
@@ -16,7 +16,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSub!: Subscription;
 
   constructor(
-    private storage: DataStorageService,
     private store: Store<AppState>
   ) { }
 
@@ -37,10 +36,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
-    this.storage.storeRecipes();
+    this.store.dispatch(STORE_RECIPIES())
   }
 
   onFetchData() {
-    this.storage.fetchRecipies().subscribe()
+    // this.storage.fetchRecipies().subscribe()
+    this.store.dispatch(FETCH_RECIPES())
   }
 }

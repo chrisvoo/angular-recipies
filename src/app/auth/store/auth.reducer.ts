@@ -11,8 +11,8 @@ const initialState: AuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(LOGIN, ((state, { payload: { email, id, token, tokenExpirationDate } }): AuthState => ({
-    ...state, authError: undefined, loading: false, user: new User(email, id, token!, tokenExpirationDate!)
+  on(LOGIN, ((state, { payload: { email, id, token, tokenExpirationDate, redirect } }): AuthState => ({
+    ...state, authError: undefined, loading: false, user: new User(email, id, token!, tokenExpirationDate!, redirect)
   }))),
   on(LOGOUT, ((state): AuthState => ({
     ...state, user: undefined

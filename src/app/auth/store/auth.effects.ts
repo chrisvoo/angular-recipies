@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
+import { of } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthResponseData, AuthService } from '../auth.service';
@@ -37,12 +37,16 @@ export class AuthEffects {
             }
           ).pipe(
             tap((resData: AuthResponseData) => {
-              this.authService.setLogoutTimer(+resData.expiresIn)
+              this.authService.setLogoutTimer(+resData.expiresIn * 1000)
             }),
             map((resData: AuthResponseData) => {
               const expirationDate = new Date(Date.now() + (+resData.expiresIn * 1000));
               const userModel = new User(
-                resData.email, resData.localId, resData.idToken, expirationDate
+                resData.email,
+                resData.localId,
+                resData.idToken,
+                expirationDate,
+                true
               );
               localStorage.setItem('userData', JSON.stringify(userModel))
 
@@ -74,8 +78,10 @@ export class AuthEffects {
   authSuccess = createEffect(() =>
     this.actions$.pipe(
       ofType(LOGIN),
-      tap(() => {
-        this.router.navigate(['/']);
+      tap((authSuccess) => {
+        if (authSuccess.payload.redirect) {
+          this.router.navigate(['/']);
+        }
       })
     ), { dispatch: false } // without this, it creates a nasty loop
   );
@@ -84,6 +90,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(LOGOUT),
         tap(() => {
+          console.log('Logout dispatched')
           this.router.navigate(['/auth'])
           localStorage.removeItem('userData')
           this.authService.clearLogoutTimer()
@@ -97,6 +104,7 @@ export class AuthEffects {
         map(() => {
           const userString = localStorage.getItem('userData');
           if (userString !== null) {
+            console.log(`Found ${userString}`)
             const userData: {
               email: string,
               id: string,
@@ -106,16 +114,17 @@ export class AuthEffects {
 
             const { email, id, _token, _tokenExpirationDate } = userData
             const expDate = new Date(_tokenExpirationDate);
-            const user = new User(email, id, _token, expDate);
+            const user = new User(email, id, _token, expDate, false);
 
             if (user.token) {
               const expDuration = new Date(_tokenExpirationDate).getTime() - new Date().getTime()
               this.authService.setLogoutTimer(expDuration)
+              console.log(`Token: ${user.token}, exp: ${expDuration}`)
               return LOGIN({ payload: user })
             }
           }
 
-          return { type: ''};
+          return { type: 'DUMMY'};
         })
       )
   );
